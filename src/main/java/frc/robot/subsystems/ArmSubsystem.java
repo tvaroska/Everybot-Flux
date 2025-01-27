@@ -15,7 +15,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkMax armMotor;
     
     /**
-     * This subsytem control the arm.
+     * This subsytem that controls the arm.
      */
     public ArmSubsystem () {
 

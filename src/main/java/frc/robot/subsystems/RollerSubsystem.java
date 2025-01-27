@@ -14,7 +14,7 @@ public class RollerSubsystem extends SubsystemBase {
 
     private final SparkMax rollerMotor;
     /**
-     * This subsytem control the roller.
+     * This subsytem that controls the roller.
      */
     public RollerSubsystem () {
 

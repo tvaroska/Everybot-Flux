@@ -15,7 +15,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private final SparkMax climbMotor;
 
     /**
-     * This subsytem control the climber.
+     * This subsytem that controls the climber.
      */
     public ClimberSubsystem () {
 
