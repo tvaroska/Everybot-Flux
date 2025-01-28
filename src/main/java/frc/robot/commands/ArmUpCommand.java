@@ -22,7 +22,6 @@ public class ArmUpCommand extends Command {
    */
   public ArmUpCommand(ArmSubsystem arm) {
     m_arm = arm;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm);
   }
 

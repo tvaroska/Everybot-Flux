@@ -42,8 +42,8 @@ public class RollerSubsystem extends SubsystemBase {
     }
 
     /**
-     *  This is a method that makes the roller spin to your desired speed
-     *  Positive values make it spin forward and negative values spin it in reverse
+     *  This is a method that makes the roller spin to your desired speed.
+     *  Positive values make it spin forward and negative values spin it in reverse.
      * 
      * @param speedmotor speed from -1.0 to 1, with 0 stopping it
      */

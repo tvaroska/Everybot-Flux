@@ -43,7 +43,8 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     /**
-     * Use to run the climber, can be set to run from 100% to -100%
+     * Use to run the climber, can be set to run from 100% to -100%.
+     * Keep in mind that the direction changes based on which way the winch is wound.
      * 
      * @param speed motor speed from -1.0 to 1, with 0 stopping it
      */

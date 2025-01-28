@@ -20,7 +20,6 @@ public class ClimberUpCommand extends Command {
    */
   public ClimberUpCommand(ClimberSubsystem climber) {
     m_climber = climber;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
   }
 

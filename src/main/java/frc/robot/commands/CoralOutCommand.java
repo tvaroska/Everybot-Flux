@@ -8,7 +8,7 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.subsystems.RollerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An CoralOutCommand that uses a roller subsystem. */
+/** A CoralOutCommand that uses a roller subsystem. */
 public class CoralOutCommand extends Command {
   private final RollerSubsystem m_roller;
 
@@ -19,7 +19,6 @@ public class CoralOutCommand extends Command {
    */
   public CoralOutCommand(RollerSubsystem roller) {
     m_roller = roller;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(roller);
   }
 

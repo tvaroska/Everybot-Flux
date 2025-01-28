@@ -107,7 +107,7 @@ public class RobotContainer {
 
     /**
      * Here we declare all of our operator commands, these commands could have been
-     * written more compact but are left verbose so the intent is clear.
+     * written in a more compact manner but are left verbose so the intent is clear.
      */
     m_operatorController.rightBumper().whileTrue(new AlgieInCommand(m_roller));
     

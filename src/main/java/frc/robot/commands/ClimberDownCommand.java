@@ -20,7 +20,6 @@ public class ClimberDownCommand extends Command {
    */
   public ClimberDownCommand(ClimberSubsystem climber) {
     m_climber = climber;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
   }
 

@@ -17,9 +17,9 @@ public class SimpleCoralAuto extends Command {
     private double exjest_seconds = 4.5;
 
     /**
-     * This auto will have the robot drive forwards, stop then drop the coral into L1
+     * This auto will have the robot drive forwards, stop, then drop the coral into L1
      * 
-     * There are many ways to write autos, this form will work well for most simple
+     * There are many ways to write autos, this style will work well for most simple
      * auto routines. For more advanced routines you may want a different structure and 
      * to use more sensors.
      * 

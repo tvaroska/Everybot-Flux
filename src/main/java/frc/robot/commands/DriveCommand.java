@@ -34,8 +34,8 @@ public class DriveCommand extends Command {
     m_drive = driveSubsystem;
     m_squared = squareInputs;
 
-    // Declare subsystems required by this command. This should include any
-    // subsystem this command sets and output of
+    // Declare subsystems required by this command. This prevents the 
+    // subsystem from being called by another command while this command is being used.
     addRequirements(m_drive);
   }
 

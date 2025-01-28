@@ -32,8 +32,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
        
-    // Used to track usage of the Everybot code, we are in process of getting approval
-    // do not remove unless by us to.
+    // Used to track usage of the Everybot code, please do not remove!
     HAL.report(tResourceType.kResourceType_Framework, 11);
   }
 

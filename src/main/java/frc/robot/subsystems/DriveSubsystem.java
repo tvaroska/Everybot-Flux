@@ -28,15 +28,15 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public DriveSubsystem() {
     // create brushed motors for drive
-    leftLeader = new SparkMax(1, MotorType.kBrushed);
+    leftLeader = new SparkMax(DriveConstants.LEFT_LEADER_ID, MotorType.kBrushed);
     leftFollower = new SparkMax(DriveConstants.LEFT_FOLLOWER_ID, MotorType.kBrushed);
-    rightLeader = new SparkMax(3, MotorType.kBrushed);
+    rightLeader = new SparkMax(DriveConstants.RIGHT_LEADER_ID, MotorType.kBrushed);
     rightFollower = new SparkMax(DriveConstants.RIGHT_FOLLOWER_ID, MotorType.kBrushed);
 
     // set up differential drive class
     drive = new DifferentialDrive(leftLeader, rightLeader);
 
-    // Set can timeout. Because this project only sets parameters once on
+    // Set CAN timeout. Because this project only sets parameters once on
     // construction, the timeout can be long without blocking robot operation. Code
     // which sets or gets parameters during operation may need a shorter timeout.
     leftLeader.setCANTimeout(250);
@@ -74,10 +74,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
   }
   /**
-   *  Use this to control your drive train, with one axis of the controllering moving the robot
-   *  forwards and backwards with the axis turning the robot.
+   *  Use this to control your drive train, with one axis of the controller moving the robot
+   *  forwards and backwards with the other axis turning the robot.
    * 
-   *  Additionally if squared is true it will square your inputs will be squared,
+   *  Additionally if squared is true, it will square your controller inputs,
    *  for instance pushing forwards on the control stick will yield
    *  (0.5 * 0.5) = .25 or 25% power to the drivetrain.
    * 
@@ -91,7 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /**
    * Use this to drive the robot, with one stick controlling one 
-   * side of the drivetrain and the other stick on the other.
+   * side of the drivetrain and the other stick controlling the other.
    * 
    * @param leftSpeed speed to drive the left side of the robot at
    * @param rightSpeed speed to drive the right side of the robot at

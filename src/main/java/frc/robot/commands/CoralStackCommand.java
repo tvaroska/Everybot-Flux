@@ -8,7 +8,7 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.subsystems.RollerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An CoralStackCommand that uses a roller subsystem.
+/** A CoralStackCommand that uses a roller subsystem.
  *  Used when coral is already in the L1 to get it past the first once.
  */
 public class CoralStackCommand extends Command {
@@ -23,7 +23,6 @@ public class CoralStackCommand extends Command {
    */
   public CoralStackCommand(RollerSubsystem roller) {
     m_roller = roller;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(roller);
   }
 
