@@ -18,12 +18,13 @@ package frc.robot;
  */
 public final class Constants {
   public static final class DriveConstants {
-    public static final int LEFT_LEADER_ID = 1;//18;//1
-    public static final int LEFT_FOLLOWER_ID = 2;//19;//2
-    public static final int RIGHT_LEADER_ID = 4;//10;//4
-    public static final int RIGHT_FOLLOWER_ID = 3;//11;//3
+    // 1st bot: 1, 2, 3, 4 -- 2nd bot: 18, 19, 10, 11
+    public static final int LEFT_LEADER_ID = 18;
+    public static final int LEFT_FOLLOWER_ID = 19;
+    public static final int RIGHT_LEADER_ID = 10;
+    public static final int RIGHT_FOLLOWER_ID = 11;
 
-    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 40;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
     public static final double DRIVE_MOTOR_VOLTAGE_COMP = 12;
     public static final double SPEED_LIMIT = 0.8;
     public static final double SLOW_MODE_MOVE = 0.5;
@@ -31,23 +32,45 @@ public final class Constants {
   }
 
   public static final class RollerConstants {
-    public static final int ROLLER_MOTOR_ID = 5;
+    public static final int ROLLER_MOTOR_ID = 14;
+    public static final int ROLLER_MOTOR_IDR = 15;
     public static final int ROLLER_MOTOR_CURRENT_LIMIT = 40;
     public static final double ROLLER_MOTOR_VOLTAGE_COMP = 10;
-    public static final double ROLLER_CORAL_OUT = -.4;
-    public static final double ROLLER_ALGAE_IN = -0.8;
-    public static final double ROLLER_ALGAE_OUT = 0.4;
+
+    public static final double ROLLER_ALGAE_IN = 0.8;
+    public static final double ROLLER_ALGAE_OUT = -0.8;
+
+    public static final double ROLLER_CORAL_OUT = -0.4;
     public static final double ROLLER_CORAL_STACK = -1;
   }
 
+  public static final class ShooterConstants {
+    public static final int UP_MOTOR_ID = 6;  // Down
+    public static final int UP_MOTOR_IDR = 7;
+    public static final int DOWN_MOTOR_ID = 8;
+    public static final int DOWN_MOTOR_IDR = 9;
+    public static final int SHOOT_MOTOR_CURRENT_LIMIT = 40;
+    public static final double SHOOT_MOTOR_VOLTAGE_COMP = 10;
+
+    public static final double ALGAE_IN = -0.4;
+    public static final double ALGAE_OUT = 0.2;
+
+    public static final double SHOOT_ALGAE_IN = 0.4;
+    public static final double SHOOT_ALGAE_OUT = -0.8;
+
+    public static final double SHOOT_CORAL_OUT = 0.1;
+    public static final double SHOOT_CORAL_STACK = -1;
+  }
+
   public static final class ArmConstants {
-    public static final int ARM_MOTOR_ID = 16;
-    public static final int ARM_MOTOR_CURRENT_LIMIT = 40;
+    public static final int ARM_MOTOR_ID = 4; // Right
+    public static final int ARM_MOTOR_IDR = 5;
+    public static final int ARM_MOTOR_CURRENT_LIMIT = 20;
     public static final double ARM_MOTOR_VOLTAGE_COMP = 10;
     public static final double ARM_SPEED_DOWN = 0.4;
     public static final double ARM_SPEED_UP = -0.4;
-    public static final double ARM_HOLD_DOWN = 0.1;
-    public static final double ARM_HOLD_UP = -0.15;
+    public static final double ARM_HOLD_DOWN = 0.2;
+    public static final double ARM_HOLD_UP = -0.2;
   }
 
   public static final class ClimberConstants {

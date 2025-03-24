@@ -13,6 +13,7 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
 
     private final SparkMax armMotor;
+    private final SparkMax armMotorR;
     
     /**
      * This subsytem that controls the arm.
@@ -21,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Set up the arm motor as a brushed motor
     armMotor = new SparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
+    armMotorR = new SparkMax(ArmConstants.ARM_MOTOR_IDR, MotorType.kBrushless);
 
     // Set can timeout. Because this project only sets parameters once on
     // construction, the timeout can be long without blocking robot operation. Code

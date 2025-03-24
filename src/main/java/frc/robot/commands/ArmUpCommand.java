@@ -33,6 +33,14 @@ public class ArmUpCommand extends Command {
   @Override
   public void execute() {
     m_arm.runArm(ArmConstants.ARM_SPEED_UP);
+    // int time = execCounter * ExecTime;
+    // if (execCounter == 0)
+    //   System.out.println("ShootCmd Start: " + time);
+
+    // if (time > 0 && time < intakeBackTime) {
+    //   System.out.println("Shooter intake: " + time);
+    //   m_roller.runRoller(rollerOut);
+    // }
   }
 
   // Called once the command ends or is interrupted.
