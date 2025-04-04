@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.autos.DriveForwardAuto;
 import frc.robot.autos.SimpleCoralAuto;
 import frc.robot.commands.AlgieInCommand;
@@ -23,6 +24,8 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.RollerSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Sensitivity;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,131 +49,58 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = 
       new CommandXboxController(OperatorConstants.OPERATOR_CONTROLLER_PORT);
 
+    private final Sensitivity sensitivityPos = 
+      new Sensitivity(OperatorConstants.Threshold, OperatorConstants.CuspX, OperatorConstants.LinCoef, OperatorConstants.SpeedLimitX);
+
+      //TODO Rot constants
+    private final Sensitivity sensitivityRot = 
+      new Sensitivity(OperatorConstants.Threshold, OperatorConstants.CuspX, OperatorConstants.LinCoef, OperatorConstants.SpeedLimitRot);
+
   // The autonomous chooser
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  public static final double LinCoef = 0.4;
-  public static final double Threshold = 0.1;
-  public static final double CuspX = 0.6;
-  public static final double SpeedLimitX = 1.0;
-  public static final double SpeedLimitRot = 0.7;
+  double m_linCoef = OperatorConstants.LinCoef;
+  double m_threshold = OperatorConstants.Threshold;
+  double m_cuspX = OperatorConstants.CuspX;
+  double m_speedLimitX = OperatorConstants.SpeedLimitX;
+  double m_speedLimitRot = OperatorConstants.SpeedLimitRot;
 
-
-  double m_linCoef = LinCoef;
-  double m_threshold = Threshold;
-  double m_cuspX = CuspX;
-  double m_speedLimitX = SpeedLimitX;
-  double m_speedLimitRot = SpeedLimitRot;
-
-  double m_speedLimit2 = 1.0;
-  double m_speedLimit3 = Constants.DriveConstants.SPEED_LIMIT;
-
-  private int intakeBackTime = AlgieShootCommand.IntakeBackTime;
-  private int shootWaitTime = AlgieShootCommand.ShootWaitTime;
-  private int shootStartTime = AlgieShootCommand.ShootStartTime;
-  private int shootEndTime = AlgieShootCommand.ShootFinishTime;
+  private int intakeBackTime = ShooterConstants.IntakeBackTime;
+  private int shootWaitTime = ShooterConstants.ShootWaitTime;
+  private int shootStartTime = ShooterConstants.ShootStartTime;
+  private int shootEndTime = ShooterConstants.ShootFinishTime;
 
   public final RollerSubsystem m_roller = new RollerSubsystem();
+  public final ShooterSubsystem m_shooter = new ShooterSubsystem();
   public final ArmSubsystem m_arm = new ArmSubsystem();
   public final DriveSubsystem m_drive = new DriveSubsystem();
   public final ClimberSubsystem m_climber = new ClimberSubsystem();
+
+  public final AlgieShootCommand shootCommandA;
+  public final AlgieShootCommand shootCommandB;
+  public final AlgieShootCommand shootCommandX;
+  public final AlgieShootCommand shootCommandY;
 
  // public final SimpleCoralAuto m_simpleCoralAuto = new SimpleCoralAuto(m_drive, m_roller, m_arm);
   public final DriveForwardAuto m_driveForwardAuto = new DriveForwardAuto(m_drive);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    shootCommandA = new AlgieShootCommand(m_shooter, m_roller, 0);
+    shootCommandB = new AlgieShootCommand(m_shooter, m_roller, 1);
+    shootCommandY = new AlgieShootCommand(m_shooter, m_roller, 2);
+    shootCommandX = new AlgieShootCommand(m_shooter, m_roller, 3);
+
     // Set up command bindings
     configureBindings();
+
     // Set the options to show up in the Dashboard for selecting auto modes. If you
     // add additional auto modes you can add additional lines here with
     // autoChooser.addOption
     //m_chooser.setDefaultOption("Coral Auto", m_simpleCoralAuto);
-    m_chooser.addOption("Drive Forward Auto", m_driveForwardAuto);
-    SmartDashboard.putData(m_chooser);
-    SmartDashboard.putNumber("Linear coefficient", m_linCoef);
-    SmartDashboard.putNumber("Speed limit", m_speedLimitX);
-    SmartDashboard.putNumber("Rot Speed limit", m_speedLimitRot);
-    SmartDashboard.putNumber("Threshold", m_threshold);
-    SmartDashboard.putNumber("Linear Zone", m_cuspX);
+    m_chooser.setDefaultOption("Auto Drive", m_driveForwardAuto);
 
-    SmartDashboard.putNumber("Intake In Time", intakeBackTime);
-    SmartDashboard.putNumber("Wait Time", shootWaitTime);
-    SmartDashboard.putNumber("Shoot Start Time", shootStartTime);
-    SmartDashboard.putNumber("Shoot End Time", shootEndTime);
-    // SmartDashboard.putNumber("Wait Time", shootWaitTime);
-    // SmartDashboard.putNumber("Shoot Start Time", shootStartTime);
-    // SmartDashboard.putNumber("Shoot End Time", shootEndTime);
-    // rollerOut = rollOut;
-    // shooterOut = shootOut;
-    // rollerIn = rollIn;
-    }
-
-  public void updateParams() {
-    System.out.println("updateParams");
-    m_linCoef = SmartDashboard.getNumber("Linear coefficient", LinCoef);
-    m_speedLimitX = SmartDashboard.getNumber("Speed limit", SpeedLimitX);
-    m_speedLimitRot = SmartDashboard.getNumber("Rot Speed limit", SpeedLimitRot);
-    m_threshold = SmartDashboard.getNumber("Threshold", Threshold);
-    m_cuspX = SmartDashboard.getNumber("Linear Zone", CuspX);
-    
-    if (m_cuspX > 0.9)
-      m_cuspX = 0.9;
-    if (m_cuspX < 0.0)
-      m_cuspX = 0.0;
-    if (m_threshold > m_cuspX)
-      m_threshold = m_cuspX / 2;
-    if (m_threshold < 0)
-      m_threshold = 0;
- 
-  //    m_roller.updateParams();
-//      updateTimes();
-    }
-
-    public void updateShooterParams() {
-
-    }
-
-    public void updateTimes() {
-      intakeBackTime = (int) SmartDashboard.getNumber("Intake In Time", AlgieShootCommand.IntakeBackTime);
-      shootWaitTime = (int) SmartDashboard.getNumber("Wait Time", AlgieShootCommand.ShootWaitTime);
-      shootStartTime = (int) SmartDashboard.getNumber("Shoot Start Time", AlgieShootCommand.ShootStartTime);
-      shootEndTime = (int) SmartDashboard.getNumber("Shoot End Time", AlgieShootCommand.ShootFinishTime);
-    }
-    /*
-    public void updateSpeed(double rollOut, double shootOut, double rollIn) {
-      rollerOut = rollOut;
-      shooterOut = shootOut;
-      rollerIn = rollIn;
-      rollerOut = Math.max(Math.min(rollerOut, 1), -1);
-      shooterOut = Math.max(Math.min(shooterOut, 1), -1);
-      rollerIn = Math.max(Math.min(rollerIn, 1), -1);
-    }
-*/
-  double sensitivity2(double x) {
-
-    double xabs = Math.abs(x);
-    if (xabs < m_threshold)
-      return 0;
-    else if (xabs <= m_cuspX) {
-      //System.out.println("Lin " + m_linCoef + " x: " + x);
-      return m_linCoef * x;
-    }
-    else {//if (xabs <= 1.0) {
-      // double x2 = (xabs - m_speedStep1);
-      // x2 *= x2;
-      double x0 = m_cuspX;
-      double g = (2.0 - x0) * x0;
-      double denom = 1.0 - g;
-      double a = (1.0 - m_linCoef) / denom;
-      double c = a * x0 * x0;
-      double b = (m_linCoef + (m_linCoef * x0 - 2.0) * x0) / denom;
-
-      //System.out.println("Quad " + m_threshold + " x: " + x);
-      xabs = a * xabs * xabs + b * xabs + c;
-      x = x >= 0 ? xabs : -xabs;
-    }
-    return x;
+    putParams();
   }
 
   /**
@@ -183,8 +113,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_operatorController.b().onTrue(new AlgieShootCommand(m_roller));
-
     /** 
      * Set the default command for the drive subsystem to an instance of the
      * DriveCommand with the values provided by the joystick axes on the driver
@@ -194,8 +122,8 @@ public class RobotContainer {
      * joystick matches the WPILib convention of counter-clockwise positive
      */
     m_drive.setDefaultCommand(new DriveCommand(m_drive,
-        () -> m_speedLimitX * sensitivity2(m_driverController.getLeftY()),
-        () -> m_speedLimitRot * sensitivity2(m_driverController.getRightX()),
+        () -> sensitivityPos.transfer(m_driverController.getLeftY()),
+        () -> sensitivityRot.transfer(m_driverController.getRightX()),
         () -> false));
 
 //    if (true) return;
@@ -226,18 +154,19 @@ public class RobotContainer {
      * The arm will be passively held up or down after this is used,
      * make sure not to run the arm too long or it may get upset!
      */
-    m_operatorController.leftBumper().whileTrue(new ArmUpCommand(m_arm));
-    m_operatorController.leftTrigger(.2).whileTrue(new ArmDownCommand(m_arm));
+    m_operatorController.leftBumper().onTrue(new ArmUpCommand(m_arm));
+    m_operatorController.leftTrigger(.2).onTrue(new ArmDownCommand(m_arm));
+    // m_operatorController.leftBumper().whileTrue(new ArmUpCommand(m_arm));
+    // m_operatorController.leftTrigger(.2).whileTrue(new ArmDownCommand(m_arm));
+    if (Constants.ArmUsePulse) {
+    }
+    else{
+    }
 
-    /**
-     * Used to score coral, the stack command is for when there is already coral
-     * in L1 where you are trying to score. The numbers may need to be tuned, 
-     * make sure the rollers do not wear on the plastic basket.
-     */
-    // m_operatorController.x().whileTrue(new CoralOutCommand(m_roller));
-    // m_operatorController.y().whileTrue(new CoralStackCommand(m_roller));
-
-//    m_operatorController.a().onTrue(new AlgieShootCommand(m_roller));
+    m_operatorController.a().onTrue(shootCommandA);
+    m_operatorController.b().onTrue(shootCommandB);
+    m_operatorController.y().onTrue(shootCommandY);
+    m_operatorController.x().onTrue(shootCommandX);
 
     /**
      * POV is a direction on the D-Pad or directional arrow pad of the controller,
@@ -248,7 +177,7 @@ public class RobotContainer {
 
     m_driverController.back().whileTrue(new Command() {
         @Override public void initialize() {
-          updateParams();
+          getParams();
         }
         // @Override public void execute() {
         //   System.out.println("execute");
@@ -263,45 +192,53 @@ public class RobotContainer {
    */
     public Command getAutonomousCommand() {
     // The selected command will be run in autonomous
-    return m_chooser.getSelected();
+        return m_chooser.getSelected();
+    }
+
+  public void putParams() {
+    //m_chooser.addOption("Drive Forward Auto", m_driveForwardAuto);
+    //SmartDashboard.putData(m_chooser);
+
+    SmartDashboard.putNumber("Linear Sensitivity", m_linCoef);
+    SmartDashboard.putNumber("Zero Zone", m_threshold);
+    SmartDashboard.putNumber("Quadric Zone", m_cuspX);
+    SmartDashboard.putNumber("Speed", m_speedLimitX);
+    SmartDashboard.putNumber("Turn Speed", m_speedLimitRot);
+
+    m_roller.putParams();
+    m_shooter.putParams();
+    m_arm.putParams();
+    shootCommandA.putParams();
+    shootCommandB.putParams();
+    shootCommandX.putParams();
+    shootCommandY.putParams();
   }
 
-  double sensitivity(double x) {
-    //m_speedLimit1 = SmartDashboard.getNumber("Drive speed limit1", 0.1);
+  public void getParams() {
+    m_linCoef = SmartDashboard.getNumber("Linear Sensitivity", OperatorConstants.LinCoef);
+    m_threshold = SmartDashboard.getNumber("Zero Zone", OperatorConstants.Threshold);
+    m_cuspX = SmartDashboard.getNumber("Quadric Zone", OperatorConstants.CuspX);
+    m_speedLimitX = SmartDashboard.getNumber("Speed", OperatorConstants.SpeedLimitX);
+    m_speedLimitRot = SmartDashboard.getNumber("Turn Speed", OperatorConstants.SpeedLimitRot);
+    
+    if (m_cuspX > 0.9)
+      m_cuspX = 0.9;
+    if (m_cuspX < 0.0)
+      m_cuspX = 0.0;
+    if (m_threshold > m_cuspX)
+      m_threshold = m_cuspX / 2;
+    if (m_threshold < 0)
+      m_threshold = 0;
 
-    double xabs = Math.abs(x);
-    if (xabs <= m_threshold) {
-      return m_linCoef * x;
-    }
-    else {//if (xabs <= 1.0) {
-      // double x2 = (xabs - m_speedStep1);
-      // x2 *= x2;
+      m_roller.getParams();
+      m_shooter.getParams();
+      m_arm.getParams();
+      shootCommandA.getParams();
+      shootCommandB.getParams();
+      shootCommandX.getParams();
+      shootCommandY.getParams();
 
-      double c = m_linCoef * m_cuspX;
-      double coef = (1 - c) / (1 - m_threshold);
-      coef *= m_speedLimit2;
-      xabs = coef * (xabs - m_threshold) + c;
-      x = x >= 0 ? xabs : -xabs;
-    }
-    // else if (xabs <= 0.6) {
-    //   // 0.32 = 0.4 * k
-    //   //x = 0.4 * (x - 0.2) + 0.04;
-    // }
-    // else {
-    //   // 0.2
-    //   //x = m_speedLimit1 * (x - 0.6) + 0.2;
-    // }
-    return x;
-  }
-
-  static double sensitivity3(double x) {
-    double xabs = Math.abs(x);
-    if (xabs < 0.1)
-      return 0;
-    else if (xabs < 0.6)
-      return 0.4 * Math.signum(x) * (xabs);
-    else return 0;
-    //return 0.5 * x * x * x;
+      System.out.println("Params updated");
   }
 
   void teleopInit() {

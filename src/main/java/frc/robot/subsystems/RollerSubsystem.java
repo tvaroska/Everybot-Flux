@@ -27,10 +27,10 @@ public class RollerSubsystem extends SubsystemBase {
 
     private SparkMax rollerMotor;
     private SparkMax rollerMotorR;
-    private final SparkMax upShooterMotor;
-    private SparkMax upShooterMotorR;
-    private SparkMax downShooterMotor;
-    private SparkMax downShooterMotorR;
+//    private final SparkMax upShooterMotor;
+    // private SparkMax upShooterMotorR;
+    // private SparkMax downShooterMotor;
+    // private SparkMax downShooterMotorR;
 
     private RelativeEncoder m_encoder;
     private RelativeEncoder rollerEncoder;
@@ -53,7 +53,7 @@ public class RollerSubsystem extends SubsystemBase {
     private SparkLimitSwitch forwardLimitSwitch;
     private SparkLimitSwitch reverseLimitSwitch;
     private RelativeEncoder encoder;
-    
+
     private final PIDCtrl pidCtrl;
     private double timeDelta;
     private double controlValue;
@@ -66,9 +66,11 @@ public class RollerSubsystem extends SubsystemBase {
 
     // Set up the roller motor as a brushed motor
     rollerMotor = new SparkMax(RollerConstants.ROLLER_MOTOR_ID, MotorType.kBrushless);
-    upShooterMotor = new SparkMax(ShooterConstants.UP_MOTOR_ID, MotorType.kBrushless);
+    rollerMotorR = new SparkMax(RollerConstants.ROLLER_MOTOR_IDR, MotorType.kBrushless);
+    m_encoder = rollerMotor.getEncoder();
 
-    // rollerMotorR = new SparkMax(RollerConstants.ROLLER_MOTOR_IDR, MotorType.kBrushless);
+    //    upShooterMotor = new SparkMax(ShooterConstants.UP_MOTOR_ID, MotorType.kBrushless);
+
     // upShooterMotorR = new SparkMax(ShooterConstants.UP_MOTOR_IDR, MotorType.kBrushless);
     // downShooterMotor = new SparkMax(ShooterConstants.DOWN_MOTOR_ID, MotorType.kBrushless);
     // downShooterMotorR = new SparkMax(ShooterConstants.DOWN_MOTOR_IDR, MotorType.kBrushless);
@@ -81,7 +83,6 @@ public class RollerSubsystem extends SubsystemBase {
 //    m_pidController.setFeedbackDevice(m_alternateEncoder);
 
 //    rollerEncoder = rollerMotor.getEncoder();
-    m_encoder = upShooterMotor.getEncoder();
 
     // forwardLimitSwitch = upShooterMotor.getForwardLimitSwitch();
     // reverseLimitSwitch = upShooterMotor.getReverseLimitSwitch();
@@ -92,7 +93,8 @@ public class RollerSubsystem extends SubsystemBase {
     // construction, the timeout can be long without blocking robot operation. Code
     // which sets or gets parameters during operation may need a shorter timeout.
     rollerMotor.setCANTimeout(250);
-    upShooterMotor.setCANTimeout(250);
+    rollerMotorR.setCANTimeout(250);
+//    upShooterMotor.setCANTimeout(250);
     //downShooterMotor.setCANTimeout(250);
 
     // Create and apply configuration for roller motor. Voltage compensation helps
@@ -102,7 +104,6 @@ public class RollerSubsystem extends SubsystemBase {
     SparkMaxConfig rollerConfig = new SparkMaxConfig();
     rollerConfig.voltageCompensation(RollerConstants.ROLLER_MOTOR_VOLTAGE_COMP);
     rollerConfig.smartCurrentLimit(RollerConstants.ROLLER_MOTOR_CURRENT_LIMIT);
-    rollerConfig.idleMode(IdleMode.kCoast);
 
 //    rollerConfig.closedLoop.pid(kP, kI, kD);
 /*
@@ -122,14 +123,17 @@ public class RollerSubsystem extends SubsystemBase {
 */     
     //com.revrobotics.spark.SparkLimitSwitch forwLimit = upShooterMotor.getForwardLimitSwitch();
 
-    upShooterMotor.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+//    upShooterMotor.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     rollerConfig.idleMode(IdleMode.kBrake);
     rollerMotor.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    rollerConfig.follow(RollerConstants.ROLLER_MOTOR_ID, true);
+    rollerMotorR.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    m_pidController = new PIDController(kP, kI, kD);
-    //m_pidController.setIZone(kIz);
-    m_pidController.setSetpoint(1);
+    // m_pidController = new PIDController(kP, kI, kD);
+    // //m_pidController.setIZone(kIz);
+    // m_pidController.setSetpoint(1);
 
     // set PID coefficients
     // m_pidController.setIZone(kIz);
@@ -138,7 +142,7 @@ public class RollerSubsystem extends SubsystemBase {
 
         pidCtrl = new PIDCtrl(kP, kI, kD, timeDelta);
 
-        SmartDashboard.putNumber("Coeff", 0.15);
+//        SmartDashboard.putNumber("Coeff", 0.15);
     }
 
     @Override
@@ -147,15 +151,15 @@ public class RollerSubsystem extends SubsystemBase {
 
     public void init() {
         m_encoder.setPosition(0);
-        m_pidController.reset();
-        m_pidController.setSetpoint(10);
+        // m_pidController.reset();
+        // m_pidController.setSetpoint(10);
         pidCtrl.reset();
         controlValue = 0;
     }
 
     public void stop() {
         rollerMotor.set(0);
-        upShooterMotor.set(0);
+//        upShooterMotor.set(0);
         //upShooterMotor.stopMotor();
     }
 
@@ -167,12 +171,13 @@ public class RollerSubsystem extends SubsystemBase {
      */
     public void runRoller(double speed){
         rollerMotor.set(speed);
+        System.out.println("Roller: " + rollerMotor.getAppliedOutput() + " - " + rollerMotorR.getAppliedOutput());
     }
 
-    public void runShooter(double speed) {
-        upShooterMotor.set(speed);
-    }
-
+    // public void runShooter(double speed) {
+    //     upShooterMotor.set(speed);
+    // }
+/*
     public void runShooter1(double speed) {
         double setPoint = 50;
 
@@ -184,7 +189,7 @@ public class RollerSubsystem extends SubsystemBase {
             //System.out.println("PID: " + m_pidController.calculate(m_encoder.getVelocity()));
             //System.out.println("Encoder A: " + m_alternateEncoder.getPosition() + "-" + m_alternateEncoder.getVelocity());
         //upShooterMotor.set(m_pidController.calculate(m_encoder.getPosition()));
-        double coeff = SmartDashboard.getNumber("Coeff", 1);
+//        double coeff = SmartDashboard.getNumber("Coeff", 1);
         //ctrlSpeed *= coeff;
 //        System.out.println("Speed: " + speed);
 
@@ -205,24 +210,15 @@ public class RollerSubsystem extends SubsystemBase {
 
         System.out.println("Applied Output: " + upShooterMotor.getAppliedOutput());            
     }
-/*
-    public void updateParams() {
-        System.out.println("updateParams");
-        m_linCoef = SmartDashboard.getNumber("Linear coefficient", LinCoef);
-        m_speedLimitX = SmartDashboard.getNumber("Speed limit", SpeedLimitX);
-        m_speedLimitRot = SmartDashboard.getNumber("Rot Speed limit", SpeedLimitRot);
-        m_threshold = SmartDashboard.getNumber("Threshold", Threshold);
-        m_cuspX = SmartDashboard.getNumber("Crease", CuspX);
-        if (m_cuspX > 0.9)
-          m_cuspX = 0.9;
-        if (m_cuspX < 0.0)
-          m_cuspX = 0.0;
-        if (m_threshold > m_cuspX)
-          m_threshold = m_cuspX / 2;
-        if (m_threshold < 0)
-          m_threshold = 0;
-     
-        m_roller.updateParams();
-    }
 */
+    public void putParams() {
+        // SmartDashboard.putNumber("Linear Sensitivity", m_linCoef);
+      }
+  
+    public void getParams() {
+//      m_linCoef = SmartDashboard.getNumber("Linear Sensitivity", LinCoef);
+
+    //   if (m_cuspX > 0.9)
+    //     m_cuspX = 0.9;
+    }
 }

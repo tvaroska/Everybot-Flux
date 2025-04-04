@@ -25,10 +25,10 @@ public class PIDCtrl {
         error1 = error2 = 0.0;
     }
 
-    public void pid(double kp, double kd, double ki, double dtime) {
-        dTime = dtime;
-        if (dTime == 0)
-            dTime = DefaultDifTime;
+    public void pid(double kp, double kd, double ki) {
+        kP = kp;
+        kD = kd;
+        kI = ki;        
     }
 
     public void delta(double dtime) {
@@ -47,10 +47,31 @@ public class PIDCtrl {
         return res;
     }
 
-    public double calculateDif2(double value, double target) {
+    public double calculateDif(double value, double target, double dt) {
         double err = target - value;
-        error2 += err * dTime;  // error2 keeps integral part
-        double res = kP * err + kI * error2 + kD * (err - error1) / dTime;
+        if (dt == 0)
+            dt = dTime;
+//        double res = (kP + kI * dTime + kD / dTime) * err - (kP + 2 * kD / dTime) * error1 + kD / dTime * error2;
+        double d1 = (kP + kI * dt) * err;
+        double d2 = - kP * error1;
+        double d3 = (err + 2 * error1 + error2) * kD / dt;
+
+        System.out.println("PIDin, " + d1 + ", " + d2 + ", " + d3);
+//        System.out.println("PIDin, " + kP + ", " + err);
+
+        double res = (kP + kI * dt) * err - kP * error1 + (err + 2 * error1 + error2) * kD / dt;
+        error2 = error1;
+        error1 = err;
+//        output += res;
+        return res;// = kP * err;
+    }
+
+    public double calculateDif2(double value, double target, double dt) {
+        if (dt == 0)
+            dt = dTime;
+        double err = target - value;
+        error2 += err * dt;  // error2 keeps integral part
+        double res = kP * err + kI * error2 + kD * (err - error1) / dt;
         error1 = err;
 //        output += res;
         return res;
@@ -63,6 +84,14 @@ public class PIDCtrl {
             x = xMax;
         if (x < -xMax)
             x = -xMax;
+        return x;
+    }
+
+    static public double limitSignedRange(double x, double xMin, double xMax) {
+        if (x > xMax)
+            x = xMax;
+        if (x < xMin)
+            x = xMin;
         return x;
     }
 }

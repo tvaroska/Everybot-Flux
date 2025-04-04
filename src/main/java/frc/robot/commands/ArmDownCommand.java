@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 /** An ArmDown command that uses an Arm subsystem. */
 public class ArmDownCommand extends Command {
   private final ArmSubsystem m_arm;
+
+  private int execCounter = 0;
 
   /**
    * Powers the arm down, when finished passively holds the arm down.
@@ -28,12 +31,24 @@ public class ArmDownCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_arm.init();
+    m_arm.setAngle(false);
+    execCounter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.runArm(ArmConstants.ARM_SPEED_DOWN);
+    int time = execCounter++ * Constants.TimePeriodMsec;
+
+    if (Constants.ArmUsePulse) {
+      if (time < ArmConstants.ARM_TIME_DOWN)
+        m_arm.run(ArmConstants.ARM_SPEED_DOWN);
+    }
+    else {
+      m_arm.runToPosition(ArmConstants.AngleDown);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -41,12 +56,14 @@ public class ArmDownCommand extends Command {
   // When the next command is caled it will override this command
   @Override
   public void end(boolean interrupted) {
-    m_arm.runArm(ArmConstants.ARM_HOLD_DOWN);
+    m_arm.run(0);
+//    m_arm.run(ArmConstants.ARM_HOLD_DOWN);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return execCounter++ * Constants.TimePeriodMsec >= ArmConstants.ARM_TIME_DOWN;
+//    return false;
   }
 }

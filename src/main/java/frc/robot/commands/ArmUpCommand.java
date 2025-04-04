@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 /** An ArmUpCommand that uses an Arm subsystem. */
 public class ArmUpCommand extends Command {
   private final ArmSubsystem m_arm;
+
+  private int execCounter = 0;
 
   /**
    * Powers the arm up, when finished passively holds the arm up.
@@ -27,13 +30,34 @@ public class ArmUpCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_arm.init();
+    m_arm.setAngle(true);
+    execCounter = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.runArm(ArmConstants.ARM_SPEED_UP);
-    // int time = execCounter * ExecTime;
+    int time = execCounter++ * Constants.TimePeriodMsec;
+
+    if (Constants.ArmUsePulse) {
+      if (time < ArmConstants.ARM_TIME_UP) {
+        System.out.println("ARM UP");
+        m_arm.run(ArmConstants.ARM_SPEED_UP);
+      }
+      else if (time < ArmConstants.ARM_TIME_UP_BRAKE1) {
+        System.out.println("ARM WAIT");
+      }
+      else if (time < ArmConstants.ARM_TIME_UP_BRAKE2) {
+        System.out.println("ARM BRAKE");
+        m_arm.run(ArmConstants.ARM_SPEED_UP_BRAKE);
+      }
+    }
+    else {
+      m_arm.runToPosition(ArmConstants.AngleUp);
+    }
+
     // if (execCounter == 0)
     //   System.out.println("ShootCmd Start: " + time);
 
@@ -48,12 +72,17 @@ public class ArmUpCommand extends Command {
   // not drop due to gravity.
   @Override
   public void end(boolean interrupted) {
-    m_arm.runArm(ArmConstants.ARM_HOLD_UP);
+    m_arm.run(0);
+//    m_arm.run(ArmConstants.ARM_HOLD_UP);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (Constants.ArmUsePulse)
+      return execCounter * Constants.TimePeriodMsec >= ArmConstants.ARM_TIME_UP_BRAKE2;
+    else
+      return execCounter * Constants.TimePeriodMsec >= ArmConstants.ArmTimeUp;
+//    return false;
   }
 }

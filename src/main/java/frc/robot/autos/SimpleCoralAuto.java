@@ -57,7 +57,7 @@ public class SimpleCoralAuto extends Command {
     /**
      * We always want to hold the arm up duirng the auto to ensure the rollers
      */ 
-    m_arm.runArm(ArmConstants.ARM_HOLD_UP);
+    m_arm.run(ArmConstants.ARM_HOLD_UP);
 
     /**
      * While this timer is less than drive_seconds, the robot will obey the command inside

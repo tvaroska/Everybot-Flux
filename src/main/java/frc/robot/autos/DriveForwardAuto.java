@@ -7,7 +7,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveForwardAuto extends Command {
     private DriveSubsystem m_drive;
     private Timer timer;
-    private double drive_seconds = 3.25;
+    private double drive_seconds = 1;//3.25;
 
       /**
      * This auto will have the robot drive forwards
