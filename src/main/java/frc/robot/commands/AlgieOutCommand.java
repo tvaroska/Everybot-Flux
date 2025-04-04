@@ -6,11 +6,13 @@ package frc.robot.commands;
 
 import frc.robot.Constants.RollerConstants;
 import frc.robot.subsystems.RollerSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** A command to remove (score or pass) Algae. */
 public class AlgieOutCommand extends Command {
   private final RollerSubsystem m_roller;
+  private final ShooterSubsystem m_shooter;
 
   /**
    * Rolls the Algae out of the intake. 
@@ -18,9 +20,10 @@ public class AlgieOutCommand extends Command {
    *
    * @param roller The subsystem used by this command.
    */
-  public AlgieOutCommand(RollerSubsystem roller) {
+  public AlgieOutCommand(RollerSubsystem roller, ShooterSubsystem shooter) {
     m_roller = roller;
-    // Use addRequirements() here to declare subsystem dependencies.
+    m_shooter = shooter;
+      // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(roller);
   }
 
@@ -32,12 +35,14 @@ public class AlgieOutCommand extends Command {
   @Override
   public void execute() {
     m_roller.runRoller(RollerConstants.ROLLER_ALGAE_OUT);
+//    m_shooter.runDown(0.3);
   }
 
   // Called once the command ends or is interrupted. This ensures the roller is not running when not intented.
   @Override
   public void end(boolean interrupted) {
     m_roller.runRoller(0);
+//    m_shooter.runDown(0);
   }
 
   // Returns true when the command should end.

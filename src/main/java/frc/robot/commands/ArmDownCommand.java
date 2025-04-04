@@ -57,13 +57,13 @@ public class ArmDownCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_arm.run(0);
-//    m_arm.run(ArmConstants.ARM_HOLD_DOWN);
+ //   m_arm.run(ArmConstants.ARM_HOLD_DOWN);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return execCounter++ * Constants.TimePeriodMsec >= ArmConstants.ARM_TIME_DOWN;
-//    return false;
+//    return execCounter++ * Constants.TimePeriodMsec >= ArmConstants.ARM_TIME_DOWN;
+    return false;
   }
 }

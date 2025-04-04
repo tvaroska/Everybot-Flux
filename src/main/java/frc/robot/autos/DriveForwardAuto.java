@@ -3,11 +3,12 @@ package frc.robot.autos;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.DriveConstants;
 
 public class DriveForwardAuto extends Command {
     private DriveSubsystem m_drive;
     private Timer timer;
-    private double drive_seconds = 1;//3.25;
+    private double drive_seconds = DriveConstants.AUTO_MODE_TIME;//3.25;
 
       /**
      * This auto will have the robot drive forwards
@@ -45,7 +46,7 @@ public class DriveForwardAuto extends Command {
     // drive at 30% speed
     if(timer.get() < drive_seconds)
     {
-        m_drive.driveArcade(0.3, 0.0,false);
+        m_drive.driveArcade(DriveConstants.AUTO_MODE_SPEED, 0.0,false);
     }
   }
 

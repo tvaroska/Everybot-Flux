@@ -136,19 +136,19 @@ public class RobotContainer {
      * 
      * When switching to single driver mode switch to the B button
      */
-    // m_driverController.leftBumper().whileTrue(new DriveCommand(m_drive, 
-    //     () -> -m_driverController.getLeftY() * DriveConstants.SLOW_MODE_MOVE,  
-    //     () -> -m_driverController.getRightX() * DriveConstants.SLOW_MODE_TURN,
-    //     () -> true));
+    m_driverController.rightBumper().whileTrue(new DriveCommand(m_drive, 
+        () -> m_driverController.getLeftY() * DriveConstants.SLOW_MODE_MOVE,  
+        () -> m_driverController.getRightX() * DriveConstants.SLOW_MODE_TURN,
+        () -> true));
 
     /**
      * Here we declare all of our operator commands, these commands could have been
      * written in a more compact manner but are left verbose so the intent is clear.
      */
-    m_operatorController.rightBumper().whileTrue(new AlgieInCommand(m_roller));
+    m_operatorController.rightBumper().whileTrue(new AlgieInCommand(m_roller, m_shooter));
     
     // Here we use a trigger as a button when it is pushed past a certain threshold
-    m_operatorController.rightTrigger(.2).whileTrue(new AlgieOutCommand(m_roller));
+    m_operatorController.rightTrigger(.2).whileTrue(new AlgieOutCommand(m_roller, m_shooter));
 
     /**
      * The arm will be passively held up or down after this is used,

@@ -163,6 +163,15 @@ public class ShooterSubsystem extends SubsystemBase {
         downShooterMotorR.set(0);
     }
 
+    public void runDown(double target) {
+        // double velUp = upEncoder.getVelocity();
+        // double velDown = downEncoder.getVelocity();
+//        upShooterMotor.set(target);
+        downShooterMotor.set(-target);
+        // SmartDashboard.putNumber("Shooter RPM Up", velUp);
+        // SmartDashboard.putNumber("Shooter RPM Down", velDown);
+    }
+
     public void runRaw(double target) {
         double velUp = upEncoder.getVelocity();
         double velDown = downEncoder.getVelocity();
