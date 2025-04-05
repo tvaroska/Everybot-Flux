@@ -56,7 +56,8 @@ public class PIDCtrl {
         double d2 = - kP * error1;
         double d3 = (err + 2 * error1 + error2) * kD / dt;
 
-        System.out.println("PIDin, " + d1 + ", " + d2 + ", " + d3);
+//        System.out.println("PIDin, " + d1 + ", " + d2 + ", " + d3);
+
 //        System.out.println("PIDin, " + kP + ", " + err);
 
         double res = (kP + kI * dt) * err - kP * error1 + (err + 2 * error1 + error2) * kD / dt;

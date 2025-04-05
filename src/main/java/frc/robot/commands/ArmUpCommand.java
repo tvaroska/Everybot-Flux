@@ -43,14 +43,14 @@ public class ArmUpCommand extends Command {
 
     if (Constants.ArmUsePulse) {
       if (time < ArmConstants.ARM_TIME_UP) {
-        System.out.println("ARM UP");
+//        System.out.println("ARM UP");
         m_arm.run(ArmConstants.ARM_SPEED_UP);
       }
       else if (time < ArmConstants.ARM_TIME_UP_BRAKE1) {
-        System.out.println("ARM WAIT");
+//        System.out.println("ARM WAIT");
       }
       else if (time < ArmConstants.ARM_TIME_UP_BRAKE2) {
-        System.out.println("ARM BRAKE");
+//        System.out.println("ARM BRAKE");
         m_arm.run(ArmConstants.ARM_SPEED_UP_BRAKE);
       }
     }

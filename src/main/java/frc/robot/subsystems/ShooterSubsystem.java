@@ -217,7 +217,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         double difUp = kV * upSetRPM + upPidCtrl.calculateDif(velUp, upSetRPM, dt);
-        System.out.printf("calculateDif: %.3f, %.3f, %.2f, -, %.2f%n", velDown, downSetRPM, velUp, velDown);
+//        System.out.printf("calculateDif: %.3f, %.3f, %.2f, -, %.2f%n", velDown, downSetRPM, velUp, velDown);
         double difDown = kV * (-downSetRPM) + downPidCtrl.calculateDif(-velDown, -downSetRPM, dt);
 
         atSpeed = Math.abs(difUp / upSetRPM - 1) < posDelta && Math.abs(difDown / downSetRPM - 1) < posDelta;
@@ -237,9 +237,18 @@ public class ShooterSubsystem extends SubsystemBase {
         downShooterMotor.set(controlValueDown);
         downShooterMotorR.set(-controlValueDown);
 
+        double cur1 = upShooterMotor.getOutputCurrent();
+        double cur2 = downShooterMotor.getOutputCurrent();
+        double cur3 = downShooterMotorR.getOutputCurrent();
+
         SmartDashboard.putNumber("Shooter RPM Up", velUp);
         SmartDashboard.putNumber("Shooter RPM Down", velDown);
         SmartDashboard.putNumber("Thrust", controlValueUp);
+
+        SmartDashboard.putNumber("CurrentUp", cur1);
+        SmartDashboard.putNumber("CurrentDown", cur2);
+
+//        System.out.printf("CUR, %.3f, %.3f, %.3f%n", cur1, cur2, cur3);
 
         System.out.printf("SHT, %d, %.2f, -, %.2f, %.3f, -, %.4f, %.4f, %.4f, %.4f%n", dtime, 1000 * dt, pos, velUp, difUp, ctrlvalUp, controlValueUp, upShooterMotor.getAppliedOutput());
         System.out.printf("SHT, %d, %.2f, -, %.2f, %.3f, -, %.4f, %.4f, %.4f, %.4f, %.4f%n", dtime, 1000 * dt, pos, velDown, difDown, ctrlvalDown, controlValueDown, downShooterMotor.getAppliedOutput(), downShooterMotorR.getAppliedOutput());

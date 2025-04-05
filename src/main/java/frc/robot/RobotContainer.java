@@ -80,6 +80,7 @@ public class RobotContainer {
   public final AlgieShootCommand shootCommandB;
   public final AlgieShootCommand shootCommandX;
   public final AlgieShootCommand shootCommandY;
+  public final ArmDownCommand armDownCmd;
 
  // public final SimpleCoralAuto m_simpleCoralAuto = new SimpleCoralAuto(m_drive, m_roller, m_arm);
   public final DriveForwardAuto m_driveForwardAuto = new DriveForwardAuto(m_drive);
@@ -90,6 +91,7 @@ public class RobotContainer {
     shootCommandB = new AlgieShootCommand(m_shooter, m_roller, 1);
     shootCommandY = new AlgieShootCommand(m_shooter, m_roller, 2);
     shootCommandX = new AlgieShootCommand(m_shooter, m_roller, 3);
+    armDownCmd = new ArmDownCommand(m_arm);
 
     // Set up command bindings
     configureBindings();
@@ -155,7 +157,7 @@ public class RobotContainer {
      * make sure not to run the arm too long or it may get upset!
      */
     m_operatorController.leftBumper().onTrue(new ArmUpCommand(m_arm));
-    m_operatorController.leftTrigger(.2).onTrue(new ArmDownCommand(m_arm));
+    m_operatorController.leftTrigger(.2).onTrue(armDownCmd);
     // m_operatorController.leftBumper().whileTrue(new ArmUpCommand(m_arm));
     // m_operatorController.leftTrigger(.2).whileTrue(new ArmDownCommand(m_arm));
     if (Constants.ArmUsePulse) {
@@ -212,6 +214,7 @@ public class RobotContainer {
     shootCommandB.putParams();
     shootCommandX.putParams();
     shootCommandY.putParams();
+    armDownCmd.putParams();
   }
 
   public void getParams() {

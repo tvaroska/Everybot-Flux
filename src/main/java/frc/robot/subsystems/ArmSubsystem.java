@@ -98,7 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
 //        armMotorR.set(-speed);
         double vel = m_encoder.getVelocity();
         double pos = m_encoder.getPosition();
-        System.out.printf("ARM-RUN, -, %.2f, %.3f, -, %.4f%n", pos, vel, armMotor.getAppliedOutput());
+//        System.out.printf("ARM-RUN, -, %.2f, %.3f, -, %.4f%n", pos, vel, armMotor.getAppliedOutput());
 
         //TODO !!! Different
         // Arm: 0.3635346591472626 - -0.3569692075252533

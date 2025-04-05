@@ -6,12 +6,22 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.RollerConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An ArmDown command that uses an Arm subsystem. */
 public class ArmDownCommand extends Command {
   private final ArmSubsystem m_arm;
+
+  double speed = ArmConstants.ARM_SPEED_DOWN;
+  double speedBrake = ArmConstants.ARM_SPEED_DOWN_BRAKE;
+
+  double timeDown = ArmConstants.ARM_TIME_DOWN;
+  double timeBreak1 = ArmConstants.ARM_TIME_DOWN_BRAKE1;
+  double timeBreak2 = ArmConstants.ARM_TIME_DOWN_BRAKE2;
 
   private int execCounter = 0;
 
@@ -32,10 +42,12 @@ public class ArmDownCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    getParams();
     m_arm.init();
     m_arm.setAngle(false);
     execCounter = 0;
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -43,8 +55,17 @@ public class ArmDownCommand extends Command {
     int time = execCounter++ * Constants.TimePeriodMsec;
 
     if (Constants.ArmUsePulse) {
-      if (time < ArmConstants.ARM_TIME_DOWN)
-        m_arm.run(ArmConstants.ARM_SPEED_DOWN);
+      if (time < timeDown) {
+          m_arm.run(speed);
+//          System.out.println("ARM DN " + speed);
+      }
+      else if (time < timeBreak1) {
+//        System.out.println("ARM DN WAIT");
+      }
+      else if (time < timeBreak2) {
+//s        System.out.println("ARM DN BRAKE");
+        m_arm.run(speedBrake);
+      }
     }
     else {
       m_arm.runToPosition(ArmConstants.AngleDown);
@@ -64,6 +85,22 @@ public class ArmDownCommand extends Command {
   @Override
   public boolean isFinished() {
 //    return execCounter++ * Constants.TimePeriodMsec >= ArmConstants.ARM_TIME_DOWN;
-    return false;
+    return execCounter * Constants.TimePeriodMsec >= timeBreak2;
+  }
+
+  public void putParams() {
+    SmartDashboard.putNumber("Arm Down Speed", speed);
+    SmartDashboard.putNumber("Arm Down Brake", speedBrake);
+    SmartDashboard.putNumber("Arm Down Time 1", timeDown);
+    SmartDashboard.putNumber("Arm Down Brake Time", timeBreak1);
+    SmartDashboard.putNumber("Arm Down Time", timeBreak2);
+  }
+
+  public void getParams() {
+    speed = SmartDashboard.getNumber("Arm Down Speed", ArmConstants.ARM_SPEED_DOWN);
+    speedBrake = SmartDashboard.getNumber("Arm Down Brake", ArmConstants.ARM_SPEED_DOWN_BRAKE);
+    timeDown = SmartDashboard.getNumber("Arm Down Time 1", ArmConstants.ARM_TIME_DOWN);
+    timeBreak1 = SmartDashboard.getNumber("Arm Down Brake Time", ArmConstants.ARM_TIME_DOWN_BRAKE1);
+    timeBreak2 = SmartDashboard.getNumber("Arm Down Time", ArmConstants.ARM_TIME_DOWN_BRAKE2);
   }
 }

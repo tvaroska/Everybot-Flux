@@ -35,7 +35,7 @@ public final class Constants {
     public static final double SLOW_MODE_TURN = 0.4;
 
     public static final double AUTO_MODE_SPEED = -0.3;
-    public static final double AUTO_MODE_TIME = 0.8;  //
+    public static final double AUTO_MODE_TIME = 0.6;  //
   }
 
   public static final class RollerConstants {
@@ -71,7 +71,7 @@ public final class Constants {
     public static final double SHOOT_ALGAE_IN = 0.4;
     public static final double SHOOT_ALGAE_OUT = -0.8;
 
-    public static final int ShootWaitDelay = 300;
+    public static final int ShootWaitDelay = 200;
     public static final int ShootStartDelay = 1500;
     public static final int ShootFinishDelay = 1000;
   
@@ -93,9 +93,13 @@ public final class Constants {
     public static final double SpeedDown3 = -2800;
     public static final double SpeedDown4 = -3000;
 
+    //PID2: 0.02/0.008/0.0008
+
     //2500/0.4/0.00008/0.001500
     //3500/2500/0.7/0.00008/0.100 / 0.002
     //1500/0.3/0.00003/0.100 / 0.001
+
+    //PID1: 0.4/0.00008/0.001
     public static final double kP = 0.4;//0.2
     public static final double kD = 0.00008;//0.001
     public static final double kI = 0.001;
@@ -115,19 +119,24 @@ public final class Constants {
     public static final int ARM_MOTOR_CURRENT_LIMIT = 40;
     public static final double ARM_MOTOR_VOLTAGE_COMP = 10;
 
-    // -0.99/630
-    // Even point: -0.25 Weak: -0.35
-    public static final double ARM_SPEED_DOWN = -0.4;//0.99;//Reduce!!!
     // Even point ALMOST: 0.2/350/330 sec
     public static final double ARM_SPEED_UP = 0.22;
-    public static final double ARM_SPEED_UP_BRAKE = -0.1;
+    public static final double ARM_SPEED_UP_BRAKE = -0.15;
+
+    public static final double ARM_TIME_UP = 360;
+    public static final double ARM_TIME_UP_BRAKE1 = 560;
+    public static final double ARM_TIME_UP_BRAKE2 = 760;
+
+    // Even point: -0.25 Weak: -0.35
+    public static final double ARM_SPEED_DOWN = -0.4;//0.99;//Reduce!!!
+    public static final double ARM_SPEED_DOWN_BRAKE = 0.2;
+
+    public static final double ARM_TIME_DOWN = 340;
+    public static final double ARM_TIME_DOWN_BRAKE1 = 450;
+    public static final double ARM_TIME_DOWN_BRAKE2 = 700;
+
     public static final double ARM_HOLD_DOWN = -0.05;
     public static final double ARM_HOLD_UP = 0.05;
-
-    public static final double ARM_TIME_DOWN = 630;
-    public static final double ARM_TIME_UP = 360;
-    public static final double ARM_TIME_UP_BRAKE1 = 620;
-    public static final double ARM_TIME_UP_BRAKE2 = 760;
 
     public static final double ArmTimeUp = 2000;
 
