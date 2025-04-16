@@ -83,12 +83,12 @@ public final class Constants {
     public static final double SpeedUp = 2500;
     public static final double SpeedDown = -2500;
 
-    public static final double SpeedUp1 = 2100;
+    public static final double SpeedUp1 = 2110;
     public static final double SpeedUp2 = 2200;
     public static final double SpeedUp3 = 2800;
     public static final double SpeedUp4 = 3000;
 
-    public static final double SpeedDown1 = -1900;
+    public static final double SpeedDown1 = -1950;
     public static final double SpeedDown2 = -2200;
     public static final double SpeedDown3 = -2800;
     public static final double SpeedDown4 = -3000;
